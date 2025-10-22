@@ -11,7 +11,7 @@ COPY . .
 # Expose the port that our app runs in
 EXPOSE 5000
 # Environment Variables
-ENV PREDICTOR_API=http://predictor-api-server:5000/heart_predictor/
+ENV PREDICTOR_API=http://prediction-api-server:5000/heart_predictor/
 #Add some meta data if necessary
 LABEL heart.predictor.api="0.0.1-beta"
 # Run our App
