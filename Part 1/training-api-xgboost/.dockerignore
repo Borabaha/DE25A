@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.log
+*.pot
+*.pyc
+.git/
+.gitignore
+models/
+*.md
+README.md
+
