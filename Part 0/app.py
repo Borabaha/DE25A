@@ -14,19 +14,22 @@ def check_heart():
         return render_template("input_form_page.html")
 
     elif request.method == "POST":
-        age = int(request.form.get("age"))  # getting input with name = age in HTML form
-        sex = int(request.form.get("sex"))  # getting input with name = sex in HTML form
-        cp = int(request.form.get("cp"))
-        trestbps = int(request.form.get("trestbps"))
-        chol = int(request.form.get("chol"))
-        fbs = int(request.form.get("fbs"))
-        restecg = int(request.form.get("restecg"))
-        thalach = int(request.form.get("thalach"))
-        exang = int(request.form.get("exang"))
-        oldpeak = float(request.form.get("oldpeak"))
-        slope = int(request.form.get("slope"))
-        ca = int(request.form.get("ca"))
-        thal = int(request.form.get("thal"))
+        try:
+            age = int(request.form.get("age"))  # getting input with name = age in HTML form
+            sex = int(request.form.get("sex"))  # getting input with name = sex in HTML form
+            cp = int(request.form.get("cp"))
+            trestbps = int(request.form.get("trestbps"))
+            chol = int(request.form.get("chol"))
+            fbs = int(request.form.get("fbs"))
+            restecg = int(request.form.get("restecg"))
+            thalach = int(request.form.get("thalach"))
+            exang = int(request.form.get("exang"))
+            oldpeak = float(request.form.get("oldpeak"))
+            slope = int(request.form.get("slope"))
+            ca = int(request.form.get("ca"))
+            thal = int(request.form.get("thal"))
+        except (ValueError, TypeError) as e:
+            return jsonify(message="Invalid input: Please fill all fields with valid numbers"), 400
 
         # we will replace this simple (and inaccurate logic) with a prediction from a machine learning model in a
         # future lab
