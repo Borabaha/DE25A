@@ -23,7 +23,7 @@ class HeartDiseasePredictor:
                 print("MODEL_REPO is undefined")
                 self.model = load_model('model.keras')
 
-        df = pd.DataFrame([prediction_input])
+        df = pd.read_json(StringIO(json.dumps(prediction_input)), orient='records')
         y_pred = self.model.predict(df)
         logging.info(y_pred[0])
         status = (y_pred[0] > 0.5)
