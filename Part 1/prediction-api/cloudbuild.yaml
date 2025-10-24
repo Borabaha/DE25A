@@ -29,6 +29,11 @@ steps:
       - '--platform=managed'
       - '--allow-unauthenticated'
       - '--port=5000'
+      - '--cpu=2'
+      - '--memory=2Gi'
+      - '--timeout=900'
+      - '--concurrency=1'
+      - '--execution-environment=gen2'
 
 images:
   - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-api:$SHORT_SHA'
