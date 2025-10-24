@@ -1,0 +1,38 @@
+steps:
+  # Step 1: Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-api:$SHORT_SHA'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-api:latest'
+      - '.'
+    dir: 'Part 1/prediction-api'
+
+  # Step 2: Push Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-api'
+    dir: 'Part 1/prediction-api'
+
+  # Step 3: Deploy to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'prediction-api'
+      - '--image=us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-api:latest'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--port=5000'
+
+images:
+  - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-api:$SHORT_SHA'
+  - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-api:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

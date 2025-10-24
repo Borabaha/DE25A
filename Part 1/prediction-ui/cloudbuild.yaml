@@ -1,0 +1,52 @@
+steps:
+  # Step 1: Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui:$SHORT_SHA'
+      - '-t'
+      - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui:latest'
+      - '.'
+    dir: 'Part 1/prediction-ui'
+
+  # Step 2: Push Docker image to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui'
+    dir: 'Part 1/prediction-ui'
+
+  # Step 3: Get prediction-api URL
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud run services describe prediction-api \
+          --region=us-central1 \
+          --format='value(status.url)' > /workspace/api_url.txt
+        echo "Prediction API URL: $(cat /workspace/api_url.txt)"
+
+  # Step 4: Deploy prediction-ui to Cloud Run with PREDICTOR_API env variable
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        API_URL=$(cat /workspace/api_url.txt)
+        gcloud run deploy prediction-ui \
+          --image=us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui:latest \
+          --region=us-central1 \
+          --platform=managed \
+          --allow-unauthenticated \
+          --port=5000 \
+          --set-env-vars=PREDICTOR_API=$${API_URL}/heart_disease_predictor
+
+images:
+  - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui:$SHORT_SHA'
+  - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
