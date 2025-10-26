@@ -2,6 +2,7 @@ import argparse
 import logging
 import sys
 from pathlib import Path
+from flask import Flask, jsonify
 
 from google.cloud import storage
 
@@ -17,19 +18,22 @@ def download_data(project_id, bucket, file_name, feature_path):
     blob.download_to_filename(feature_path)
     logging.info('Downloaded Data!')
 
+app = Flask(__name__)
 
-# Defining and parsing the command-line arguments
-def parse_command_line_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--project_id', type=str, help="GCP project id")
-    parser.add_argument('--bucket', type=str, help="Name of the data bucket")
-    parser.add_argument('--file_name', type=str, help="Name of the training data set file name")
-    parser.add_argument('--feature_path', type=str, help="Name of the file to be used to store features")
-    args = parser.parse_args()
-    return vars(args)  # The vars() method returns the __dict__ (dictionary mapping) attribute of the given object.
+@app.route("/run", methods=["POST"])
+def run_component():
+    print("Running data ingestion...")
 
-
-if __name__ == '__main__':
     download_data(
-        **parse_command_line_arguments())  # The *args and **kwargs is a common idiom to allow arbitrary number of
-    # arguments to functions
+        project_id="de2025-475823",
+        bucket="data_de2025_group6",
+        file_name="Heart_disease_cleveland_new.csv",
+        feature_path="/tmp/Heart_disease_cleveland_new.csv"
+    )
+
+    return jsonify({"status": "success", "message": "Data ingestion completed!"})
+
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)

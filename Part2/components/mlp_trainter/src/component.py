@@ -21,13 +21,13 @@ def train_mlp(project_id, feature_path, model_repo, metrics_path):
     # split into input (X) and output (Y) variables
     feature_columns = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 
                    'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
-    target_column = 'target'  # 或者 'num', 'disease' 等，看你的数据集
+    target_column = 'target'  
 
     X = df[feature_columns].values
     Y = df[target_column].values
     # define model
     model = Sequential()
-    model.add(Dense(12, input_dim=8, activation='relu'))
+    model.add(Dense(12, input_dim=len(feature_columns), activation='relu'))
     model.add(Dense(8, activation='relu'))
     model.add(Dense(1, activation='sigmoid'))
     # compile model
@@ -61,17 +61,22 @@ def train_mlp(project_id, feature_path, model_repo, metrics_path):
         json.dump(metrics, outfile)
 
 
-# Defining and parsing the command-line arguments
-def parse_command_line_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--project_id', type=str, help="GCP project id")
-    parser.add_argument('--feature_path', type=str, help="CSV file with features")
-    parser.add_argument('--model_repo', type=str, help="Name of the model bucket")
-    parser.add_argument('--metrics_path', type=str, help="Name of the file to be used for saving evaluation metrics")
-    args = parser.parse_args()
-    return vars(args)
+from flask import Flask, jsonify
 
+app = Flask(__name__)
 
-if __name__ == '__main__':
-    train_mlp(**parse_command_line_arguments())
-    # The *args and **kwargs is a common idiom to allow arbitrary number of arguments to functions
+@app.route("/train", methods=["POST"])
+def run_train():
+    print("Running MLP trainer...")
+    metrics = train_mlp(
+        project_id="de2025-475823",
+        feature_path="/tmp/Heart_disease_cleveland_new.csv",
+        model_repo="models_de2025_group6",
+        metrics_path="/tmp/metrics.json"
+    )
+    return jsonify({"status": "success", "message": "Training completed!"})
+
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
