@@ -1,5 +1,12 @@
-FROM python:3.10.7-slim
-WORKDIR /pipelines/component/src
-ADD src/component.py ./
-ADD requirements.txt ./
-RUN pip install -r requirements.txt
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY src/component.py .
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 8080
+
+CMD ["python", "component.py"]
