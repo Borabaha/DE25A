@@ -38,7 +38,7 @@ def train_mlp(project_id, feature_path, model_repo, metrics_path):
     scores = model.evaluate(X, Y, verbose=0)
     logging.info(model.metrics_names)
     metrics = {
-        "accuracy:": scores[1],
+        "accuracy": scores[1],
         "loss": scores[0],
     }
 

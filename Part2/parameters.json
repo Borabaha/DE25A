@@ -1,8 +1,0 @@
-{
-  "project_id": "de2025-475823",
-  "data_bucket": "data_bucket_group6",
-  "trainset_filename": "Heart_disease_cleveland_new.csv",
-  "model_repo": "models_bucket_group6",
-  "region": "asia-northeast3",
-  "pipeline_root": "gs://temp_bucket_group6"
-}
