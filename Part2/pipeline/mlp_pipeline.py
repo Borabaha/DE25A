@@ -87,4 +87,4 @@ def run_pipeline():
 
 if __name__ == '__main__':
     compile_pipeline()
-    # run_pipeline()
+    run_pipeline()
