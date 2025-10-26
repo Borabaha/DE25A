@@ -1,90 +1,45 @@
-import google.cloud.aiplatform as aip
 import kfp
-from kfp import compiler
 from kfp import dsl
-from kfp.dsl import (Artifact,
-                     Input,
-                     Output,
-                     OutputPath)
+import requests
+
+# === Cloud Run  ===
+DATA_INGESTOR_URL = "https://dataingestor-service-41144114503.us-central1.run.app/run"
+MLP_TRAINER_URL = "https://mlptrainer-service-41144114503.us-central1.run.app/train"
 
 
-@dsl.container_component
-def data_ingestion(project: str, bucket: str, data_file_name: str, features: Output[Artifact]):
-    return dsl.ContainerSpec(
-        image=f'us-central1-docker.pkg.dev/{project}/labrepo/dataingestor:0.0.1',
-        command=[
-            'python3', '/pipelines/component/src/component.py'
-        ],
-        args=['--project_id', project, '--bucket', bucket, '--file_name', data_file_name, '--feature_path',
-              features.path])
+@dsl.component(base_image="python:3.10-slim")
+def call_data_ingestor():
+    import requests
+    import json
+    print("🔹 Calling Data Ingestor Cloud Run service...")
+    resp = requests.post(DATA_INGESTOR_URL)
+    print(f"Response: {resp.status_code}, {resp.text}")
+    if resp.status_code != 200:
+        raise RuntimeError("❌ Data Ingestor service failed!")
 
 
-@dsl.container_component
-def mlp_training(project: str, features: Input[Artifact], model_bucket: str, metrics: OutputPath(str)):
-    return dsl.ContainerSpec(
-        image=f'us-central1-docker.pkg.dev/{project}/labrepo/mlptrainer:0.0.1',
-        command=[
-            'python3', '/pipelines/component/src/component.py'
-        ],
-        args=['--project_id', project, '--feature_path', features.path, '--model_repo', model_bucket, '--metrics_path',
-              metrics])
+@dsl.component(base_image="python:3.10-slim")
+def call_mlp_trainer():
+    import requests
+    import json
+    print("🔹 Calling MLP Trainer Cloud Run service...")
+    resp = requests.post(MLP_TRAINER_URL)
+    print(f"Response: {resp.status_code}, {resp.text}")
+    if resp.status_code != 200:
+        raise RuntimeError("❌ MLP Trainer service failed!")
 
 
-# Define the workflow of the pipeline.
-@kfp.dsl.pipeline(
-    name="heartdisease-predictor-mlp")
-def mlp_pipeline(project_id: str, data_bucket: str, trainset_filename: str, model_repo: str):
-    # The first step
-    di_op = data_ingestion(
-        project=project_id,
-        bucket=data_bucket,
-        data_file_name=trainset_filename
-    )
-
-    # The second step 
-    training_op = mlp_training(
-        project=project_id,
-        model_bucket=model_repo,
-        features=di_op.outputs['features']
-    )
-
-
-def compile_pipeline():
-    compiler.Compiler().compile(pipeline_func=mlp_pipeline,
-                                package_path='heartdisease_predictor_mlp.yaml')
-
-
+@dsl.pipeline(
+    name="heartdisease-predictor-mlp-pipeline",
+    description="Pipeline using Cloud Run components for data ingestion and model training"
+)
 def run_pipeline():
-    # The Google Cloud project that this pipeline runs in.
-    PROJECT_ID = "de2025-475823"
-    # The region that this pipeline runs in
-    REGION = "us-central1"
-    # TODO: Replace with your temp bucket name
-    PIPELINE_ROOT = "gs://temp_de2025_group6"
-
-    # Before initializing, make sure to set the GOOGLE_APPLICATION_CREDENTIALS
-    # environment variable to the path of your service account.
-    aip.init(
-        project=PROJECT_ID,
-        location=REGION,
-    )
-
-    job = aip.PipelineJob(
-        display_name="heartdisease-predictor-mlp-pipeline",
-        template_path="heartdisease_predictor_mlp.yaml",
-        enable_caching=False,
-        pipeline_root=PIPELINE_ROOT,
-        parameter_values={
-            'project_id': PROJECT_ID,
-            'data_bucket': 'data_de2025_group6',  # makesure to use your data bucket name
-            'trainset_filename': 'Heart_disease_cleveland_new.csv',
-            'model_repo': 'models_de2025_group6'  # makesure to use your model bucket name
-        }
-    )
-
-    job.run()
+    data_ingestor_step = call_data_ingestor()
+    mlp_trainer_step = call_mlp_trainer().after(data_ingestor_step)
 
 
-if __name__ == '__main__':
-    compile_pipeline()
-    run_pipeline()
+if __name__ == "__main__":
+    from kfp import compiler
+    compiler.Compiler().compile(pipeline_func=run_pipeline,
+                                package_path='heartdisease_predictor_mlp_cloudrun.yaml')
+    print("✅ Pipeline compiled successfully!")
