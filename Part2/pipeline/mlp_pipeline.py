@@ -32,7 +32,7 @@ def mlp_training(project: str, features: Input[Artifact], model_bucket: str, met
 
 # Define the workflow of the pipeline.
 @kfp.dsl.pipeline(
-    name="diabetes-predictor-mlp")
+    name="heartdisease-predictor-mlp")
 def mlp_pipeline(project_id: str, data_bucket: str, trainset_filename: str, model_repo: str):
     # The first step
     di_op = data_ingestion(
@@ -51,14 +51,14 @@ def mlp_pipeline(project_id: str, data_bucket: str, trainset_filename: str, mode
 
 def compile_pipeline():
     compiler.Compiler().compile(pipeline_func=mlp_pipeline,
-                                package_path='diabetes_predictor_mlp.yaml')
+                                package_path='heartdisease_predictor_mlp.yaml')
 
 
 def run_pipeline():
     # The Google Cloud project that this pipeline runs in.
     PROJECT_ID = "de2025-475823"
     # The region that this pipeline runs in
-    REGION = "asia-northeast3"
+    REGION = "us-central1"
     # TODO: Replace with your temp bucket name
     PIPELINE_ROOT = "gs://temp_de2025_group6"
 
@@ -70,8 +70,8 @@ def run_pipeline():
     )
 
     job = aip.PipelineJob(
-        display_name="diabetes-predictor-mlp-pipeline",
-        template_path="diabetes_predictor_mlp.yaml",
+        display_name="heartdisease-predictor-mlp-pipeline",
+        template_path="heartdisease_predictor_mlp.yaml",
         enable_caching=False,
         pipeline_root=PIPELINE_ROOT,
         parameter_values={
