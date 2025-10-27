@@ -1,71 +1,71 @@
 {
-  "steps": [
-    {
-      "name": "gcr.io/cloud-builders/docker",
-      "args": [
-        "build",
-        "-t",
-        "us-central1-docker.pkg.dev/de2025-475823/labrepo/dataingestor",
-        "./components/data_ingestor"
-      ]
-    },
-    {
-      "name": "gcr.io/cloud-builders/docker",
-      "args": [
-        "push",
-        "us-central1-docker.pkg.dev/de2025-475823/labrepo/dataingestor"
-      ]
-    },
-    {
-      "name": "gcr.io/cloud-builders/gcloud",
-      "args": [
-        "run",
-        "deploy",
-        "dataingestor-service",
-        "--image",
-        "us-central1-docker.pkg.dev/de2025-475823/labrepo/dataingestor",
-        "--region",
-        "us-central1",
-        "--platform",
-        "managed",
-        "--allow-unauthenticated"
-      ]
-    },
-    {
-      "name": "gcr.io/cloud-builders/docker",
-      "args": [
-        "build",
-        "-t",
-        "us-central1-docker.pkg.dev/de2025-475823/labrepo/mlptrainer",
-        "./components/mlp_trainer"
-      ]
-    },
-    {
-      "name": "gcr.io/cloud-builders/docker",
-      "args": [
-        "push",
-        "us-central1-docker.pkg.dev/de2025-475823/labrepo/mlptrainer"
-      ]
-    },
-    {
-      "name": "gcr.io/cloud-builders/gcloud",
-      "args": [
-        "run",
-        "deploy",
-        "mlptrainer-service",
-        "--image",
-        "us-central1-docker.pkg.dev/de2025-475823/labrepo/mlptrainer",
-        "--region",
-        "us-central1",
-        "--platform",
-        "managed",
-        "--memory",
-        "2Gi",
-        "--allow-unauthenticated"
-      ]
-    }
-  ],
-  "timeout": "1800s",
+ "steps": [
+ {
+"name": "gcr.io/cloud-builders/docker",
+"args": [
+"build",
+"-t",
+"us-central1-docker.pkg.dev/de2025-475823/labrepo/dataingestor",
+"./Part2/components/data_ingestor"
+ ]
+ },
+ {
+"name": "gcr.io/cloud-builders/docker",
+"args": [
+"push",
+"us-central1-docker.pkg.dev/de2025-475823/labrepo/dataingestor"
+ ]
+ },
+ {
+"name": "gcr.io/cloud-builders/gcloud",
+"args": [
+"run",
+"deploy",
+"dataingestor-service",
+"--image",
+"us-central1-docker.pkg.dev/de2025-475823/labrepo/dataingestor",
+"--region",
+"us-central1",
+"--platform",
+"managed",
+"--allow-unauthenticated"
+ ]
+ },
+ {
+"name": "gcr.io/cloud-builders/docker",
+"args": [
+"build",
+"-t",
+"us-central1-docker.pkg.dev/de2025-475823/labrepo/mlptrainer",
+"./Part2/components/mlp_trainer"
+ ]
+ },
+ {
+"name": "gcr.io/cloud-builders/docker",
+"args": [
+"push",
+"us-central1-docker.pkg.dev/de2025-475823/labrepo/mlptrainer"
+ ]
+ },
+ {
+"name": "gcr.io/cloud-builders/gcloud",
+"args": [
+"run",
+"deploy",
+"mlptrainer-service",
+"--image",
+"us-central1-docker.pkg.dev/de2025-475823/labrepo/mlptrainer",
+"--region",
+"us-central1",
+"--platform",
+"managed",
+"--memory",
+"2Gi",
+"--allow-unauthenticated"
+ ]
+ }
+ ],
+"timeout": "1800s",
 "options": {
   "logging": "CLOUD_LOGGING_ONLY"
 }
