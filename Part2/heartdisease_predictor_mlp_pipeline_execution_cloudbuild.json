@@ -1,0 +1,21 @@
+{
+  "steps": [
+    {
+      "name": "gcr.io/google.com/cloudsdktool/cloud-sdk:slim",
+      "entrypoint": "bash",
+      "args": [
+        "-c",
+        "echo '🚀 Simulating Vertex AI pipeline run via Cloud Run...' && \
+         curl -X POST ${_DATA_INGESTOR_URL}/run && \
+         curl -X POST ${_MLP_TRAINER_URL}/train"
+      ]
+    }
+  ],
+  "substitutions": {
+    "_DATA_INGESTOR_URL": "https://dataingestor-service-41144114503.us-central1.run.app",
+    "_MLP_TRAINER_URL": "https://mlptrainer-service-41144114503.us-central1.run.app"
+  },
+  "options": {
+    "logging": "CLOUD_LOGGING_ONLY"
+  }
+}
