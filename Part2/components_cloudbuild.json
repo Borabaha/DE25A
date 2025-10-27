@@ -65,5 +65,8 @@
       ]
     }
   ],
-  "timeout": "1800s"
+  "timeout": "1800s",
+"options": {
+  "logging": "CLOUD_LOGGING_ONLY"
+}
 }
