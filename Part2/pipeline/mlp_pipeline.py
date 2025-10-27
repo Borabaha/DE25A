@@ -1,45 +1,70 @@
-import kfp
-from kfp import dsl
+from google.cloud import aiplatform
+from kfp import dsl, compiler
 import requests
 
-# === Cloud Run  ===
+# === Cloud / Project Info ===
+PROJECT_ID = "de2025-475823"
+REGION = "us-central1"
+
+# === Cloud Run Endpoints ===
 DATA_INGESTOR_URL = "https://dataingestor-service-41144114503.us-central1.run.app/run"
 MLP_TRAINER_URL = "https://mlptrainer-service-41144114503.us-central1.run.app/train"
 
-
-@dsl.component(base_image="python:3.10-slim")
-def call_data_ingestor():
-    import requests
-    import json
-    print("🔹 Calling Data Ingestor Cloud Run service...")
-    resp = requests.post(DATA_INGESTOR_URL)
-    print(f"Response: {resp.status_code}, {resp.text}")
-    if resp.status_code != 200:
-        raise RuntimeError("❌ Data Ingestor service failed!")
+# === Initialize Vertex AI ===
+aiplatform.init(project=PROJECT_ID, location=REGION)
 
 
-@dsl.component(base_image="python:3.10-slim")
-def call_mlp_trainer():
-    import requests
-    import json
-    print("🔹 Calling MLP Trainer Cloud Run service...")
-    resp = requests.post(MLP_TRAINER_URL)
-    print(f"Response: {resp.status_code}, {resp.text}")
-    if resp.status_code != 200:
-        raise RuntimeError("❌ MLP Trainer service failed!")
+# === Step 1: Define components ===
+@dsl.component
+def trigger_data_ingestor():
+    print("🚀 Triggering Data Ingestor...")
+    try:
+        response = requests.post(DATA_INGESTOR_URL)
+        print(f"Response: {response.text}")
+        return response.text
+    except Exception as e:
+        print(f"❌ Data Ingestor call failed: {e}")
+        raise
+
+@dsl.component
+def trigger_mlp_trainer():
+    print("🚀 Triggering MLP Trainer...")
+    try:
+        response = requests.post(MLP_TRAINER_URL)
+        print(f"Response: {response.text}")
+        return response.text
+    except Exception as e:
+        print(f"❌ MLP Trainer call failed: {e}")
+        raise
 
 
+# === Step 2: Define Pipeline ===
 @dsl.pipeline(
-    name="heartdisease-predictor-mlp-pipeline",
-    description="Pipeline using Cloud Run components for data ingestion and model training"
+    name="heart-disease-pipeline-cloudrun",
+    description="Vertex pipeline calling Cloud Run services for continuous training"
 )
-def run_pipeline():
-    data_ingestor_step = call_data_ingestor()
-    mlp_trainer_step = call_mlp_trainer().after(data_ingestor_step)
+def heart_disease_pipeline():
+    data_task = trigger_data_ingestor()
+    train_task = trigger_mlp_trainer().after(data_task)
 
 
+# === Step 3: Compile and Run ===
 if __name__ == "__main__":
-    from kfp import compiler
-    compiler.Compiler().compile(pipeline_func=run_pipeline,
-                                package_path='heartdisease_predictor_mlp_cloudrun.yaml')
-    print("✅ Pipeline compiled successfully!")
+    # Compile the pipeline into a YAML package
+    yaml_path = "heartdisease_predictor_mlp_cloudrun.yaml"
+    compiler.Compiler().compile(
+        pipeline_func=heart_disease_pipeline,
+        package_path=yaml_path
+    )
+    print(f"✅ Pipeline compiled successfully: {yaml_path}")
+
+    # Upload and execute the pipeline on Vertex AI
+    job = aiplatform.PipelineJob(
+        display_name="heart_disease_pipeline_cloudrun",
+        template_path=yaml_path,
+        location=REGION,
+    )
+
+    print("🚀 Submitting pipeline job to Vertex AI...")
+    job.run()
+    print("✅ Pipeline submitted successfully. Check Vertex AI → Pipelines for execution status.")
