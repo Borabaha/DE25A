@@ -74,7 +74,7 @@ def run_train():
     data_file = "Heart_disease_cleveland_new.csv"
     local_data_path = "/tmp/Heart_disease_cleveland_new.csv"
     
-    # 下载数据从GCS
+    # download data from GCS
     print(f"Downloading data from gs://{data_bucket}/{data_file}")
     client = storage.Client(project=project_id)
     bucket = client.get_bucket(data_bucket)
