@@ -68,13 +68,29 @@ app = Flask(__name__)
 @app.route("/train", methods=["POST"])
 def run_train():
     print("Running MLP trainer...")
+    
+    project_id = "de2025-475823"
+    data_bucket = "data_de2025_group6"
+    data_file = "Heart_disease_cleveland_new.csv"
+    local_data_path = "/tmp/Heart_disease_cleveland_new.csv"
+    
+    # 下载数据从GCS
+    print(f"Downloading data from gs://{data_bucket}/{data_file}")
+    client = storage.Client(project=project_id)
+    bucket = client.get_bucket(data_bucket)
+    blob = bucket.blob(data_file)
+    blob.download_to_filename(local_data_path)
+    print(f"Data downloaded to {local_data_path}")
+    
     metrics = train_mlp(
-        project_id="de2025-475823",
-        feature_path="/tmp/Heart_disease_cleveland_new.csv",
+        project_id=project_id,
+        feature_path=local_data_path,
         model_repo="models_de2025_group6",
         metrics_path="/tmp/metrics.json"
     )
-    return jsonify({"status": "success", "message": "Training completed!"})
+    
+    return jsonify({"status": "success", "message": "Training completed!", "metrics": metrics})
+
 
 if __name__ == "__main__":
     import os
