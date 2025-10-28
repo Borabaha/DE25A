@@ -1,4 +1,11 @@
 steps:
+  # Step 0: Copy model from new account bucket
+    - name: 'gcr.io/cloud-builders/gsutil'
+      args:
+        - 'cp'
+        - 'gs://models2_de2025_group6/model.keras'
+        - 'Part 1/prediction-api/models/model.keras'
+
   # Step 1: Build Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
