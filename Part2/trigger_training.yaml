@@ -1,84 +1,84 @@
 # trigger_training.yaml
-# 从账号B (de2025-475823) 触发账号A (pelagic-pager-472017-v5) 的Vertex AI Pipeline训练
+# 提交 Vertex AI Pipeline 任务
 
 steps:
-# 提交 Vertex AI Pipeline Job
-- name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
-  entrypoint: "bash"
+# Step 1: 打印配置信息
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+  entrypoint: 'bash'
   args:
-    - -c
+    - '-c'
     - |
-      set -euo pipefail
+      echo "🚀 Vertex AI Pipeline 触发开始"
+      echo "======================================"
+      echo "Project: pelagic-pager-472017-v5"
+      echo "Region: us-central1"
+      echo "Pipeline Root: gs://temp2_de2025_group6"
+      echo "Pipeline YAML: gs://temp2_de2025_group6/heart_disease_training_pipeline.yaml"
+      echo "Data Bucket: data2_de2025_group6"
+      echo "Model Bucket: models2_de2025_group6"
+      echo "======================================"
 
-      # ================================
-      # 配置参数（按你实际情况改）
-      # ================================
-      ACCOUNT_A_PROJECT="pelagic-pager-472017-v5"
-      REGION="us-central1"
+# Step 2: 安装 Python 依赖
+- name: 'python:3.10'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      pip install --quiet google-cloud-aiplatform kfp
 
-      PIPELINE_ROOT="gs://temp2_de2025_group6"
-      # 注意：这里要写你编译出来的 pipeline 模板的**实际文件名**（.json 或 .yaml）
-      PIPELINE_YAML="${PIPELINE_ROOT}/heart_disease_training_pipeline.yaml"
+# Step 3: 提交 Vertex AI Pipeline 任务
+- name: 'python:3.10'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      echo "🚀 正在提交 Vertex AI Pipeline Job..."
 
-      DATA_BUCKET="data2_de2025_group6"
-      MODEL_BUCKET="models2_de2025_group6"
-      TRAINSET_FILE="Heart_disease_cleveland_new.csv"
+      python3 - <<'PYCODE'
+      from google.cloud import aiplatform as aip
+      from datetime import datetime
 
-      echo "================ Pipeline Config ================"
-      echo "Project:        ${ACCOUNT_A_PROJECT}"
-      echo "Region:         ${REGION}"
-      echo "Pipeline Root:  ${PIPELINE_ROOT}"
-      echo "Pipeline YAML:  ${PIPELINE_YAML}"
-      echo "Data Bucket:    ${DATA_BUCKET}"
-      echo "Model Bucket:   ${MODEL_BUCKET}"
-      echo "================================================="
+      PROJECT = "pelagic-pager-472017-v5"
+      LOCATION = "us-central1"
+      PIPELINE_YAML = "gs://temp2_de2025_group6/heart_disease_training_pipeline.yaml"
+      PIPELINE_ROOT = "gs://temp2_de2025_group6"
 
-      # 依赖
-      pip3 install --quiet google-cloud-aiplatform kfp
+      PARAMS = {
+          "project_id": PROJECT,
+          "data_bucket": "data2_de2025_group6",
+          "trainset_filename": "Heart_disease_cleveland_new.csv",
+          "model_repo": "models2_de2025_group6",
+      }
 
-      echo "🚀 正在提交 Pipeline Job..."
+      aip.init(project=PROJECT, location=LOCATION, staging_bucket=PIPELINE_ROOT)
+      job_name = f"heart-disease-training-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
 
-      # --- 关键：heredoc 必须在多行字符串中，且结束标记与此行对齐 ---
-      python3 <<'PYCODE'
-from google.cloud import aiplatform as aip
-from datetime import datetime
+      job = aip.PipelineJob(
+          display_name=job_name,
+          template_path=PIPELINE_YAML,
+          pipeline_root=PIPELINE_ROOT,
+          parameter_values=PARAMS,
+          enable_caching=False,
+      )
+      job.submit()
 
-PROJECT = "pelagic-pager-472017-v5"
-LOCATION = "us-central1"
+      print("✅ Pipeline Job 已提交")
+      print(f"Job 名称: {job_name}")
+      print(f"资源名: {job.resource_name}")
+      PYCODE
 
-PIPELINE_YAML = "gs://temp2_de2025_group6/heart_disease_training_pipeline.yaml"
-PIPELINE_ROOT = "gs://temp2_de2025_group6"
+# Step 4: 打印成功日志
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      echo "======================================"
+      echo "✅ Vertex AI Pipeline 触发成功！"
+      echo "======================================"
 
-PARAMS = {
-    "project_id": PROJECT,
-    "data_bucket": "data2_de2025_group6",
-    "trainset_filename": "Heart_disease_cleveland_new.csv",
-    "model_repo": "models2_de2025_group6",
-}
+timeout: "1200s"  # 20分钟超时
 
-aip.init(project=PROJECT, location=LOCATION, staging_bucket=PIPELINE_ROOT)
-
-job_name = f"heart-disease-training-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-job = aip.PipelineJob(
-    display_name=job_name,
-    template_path=PIPELINE_YAML,
-    pipeline_root=PIPELINE_ROOT,
-    parameter_values=PARAMS,
-    enable_caching=False,
-)
-job.submit()
-
-print("✅ Pipeline Job 已提交")
-print("Job 名称:", job_name)
-print("资源名:", job.resource_name)
-PYCODE
-      # --- heredoc 结束标记行（PYCODE）前面不要有多余空格 ---
-
-      echo "================================"
-      echo "✅ 触发成功！"
-      echo "================================"
-
-timeout: "1200s"  # 20分钟
 options:
   logging: CLOUD_LOGGING_ONLY
   machineType: E2_HIGHCPU_8
