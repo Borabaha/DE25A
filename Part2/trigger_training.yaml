@@ -2,95 +2,83 @@
 # 从账号B (de2025-475823) 触发账号A (pelagic-pager-472017-v5) 的Vertex AI Pipeline训练
 
 steps:
-  # 提交Vertex AI Pipeline Job到账号A
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        set -e
-        
-        # ===========================================
-        # 配置参数
-        # ===========================================
-        ACCOUNT_A_PROJECT="pelagic-pager-472017-v5"
-        REGION="us-central1"
-        PIPELINE_ROOT="gs://temp2_de2025_group6"
-        PIPELINE_YAML="${PIPELINE_ROOT}/heart_disease_training_pipeline.yaml"
-        
-        # Pipeline参数
-        DATA_BUCKET="data2_de2025_group6"
-        MODEL_BUCKET="models2_de2025_group6"
-        TRAINSET_FILE="Heart_disease_cleveland_new.csv"
-        
-        # ===========================================
-        # 显示配置信息
-        # ===========================================
-        echo "=========================================="
-        echo "🚀 触发账号A的Vertex AI Pipeline训练"
-        echo "=========================================="
-        echo "目标项目: $ACCOUNT_A_PROJECT"
-        echo "Region: $REGION"
-        echo "Pipeline Root: $PIPELINE_ROOT"
-        echo "Pipeline YAML: $PIPELINE_YAML"
-        echo "数据bucket: $DATA_BUCKET"
-        echo "模型bucket: $MODEL_BUCKET"
-        echo "=========================================="
-        
-        # ===========================================
-        # 安装Python依赖
-        # ===========================================
-        echo "📦 安装必要的Python包..."
-        pip3 install --quiet google-cloud-aiplatform kfp
-        
-        # ===========================================
-        # 使用Python提交Pipeline
-        # ===========================================
-        echo "📤 正在提交Pipeline Job..."
-        
-        python3 << 'EOF'
-import google.cloud.aiplatform as aip
+# 提交 Vertex AI Pipeline Job
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk:latest
+  entrypoint: "bash"
+  args:
+    - -c
+    - |
+      set -euo pipefail
+
+      # ================================
+      # 配置参数（按你实际情况改）
+      # ================================
+      ACCOUNT_A_PROJECT="pelagic-pager-472017-v5"
+      REGION="us-central1"
+
+      PIPELINE_ROOT="gs://temp2_de2025_group6"
+      # 注意：这里要写你编译出来的 pipeline 模板的**实际文件名**（.json 或 .yaml）
+      PIPELINE_YAML="${PIPELINE_ROOT}/heart_disease_training_pipeline.yaml"
+
+      DATA_BUCKET="data2_de2025_group6"
+      MODEL_BUCKET="models2_de2025_group6"
+      TRAINSET_FILE="Heart_disease_cleveland_new.csv"
+
+      echo "================ Pipeline Config ================"
+      echo "Project:        ${ACCOUNT_A_PROJECT}"
+      echo "Region:         ${REGION}"
+      echo "Pipeline Root:  ${PIPELINE_ROOT}"
+      echo "Pipeline YAML:  ${PIPELINE_YAML}"
+      echo "Data Bucket:    ${DATA_BUCKET}"
+      echo "Model Bucket:   ${MODEL_BUCKET}"
+      echo "================================================="
+
+      # 依赖
+      pip3 install --quiet google-cloud-aiplatform kfp
+
+      echo "🚀 正在提交 Pipeline Job..."
+
+      # --- 关键：heredoc 必须在多行字符串中，且结束标记与此行对齐 ---
+      python3 <<'PYCODE'
+from google.cloud import aiplatform as aip
 from datetime import datetime
 
-# 初始化Vertex AI
-aip.init(
-    project="pelagic-pager-472017-v5",
-    location="us-central1",
-)
+PROJECT = "pelagic-pager-472017-v5"
+LOCATION = "us-central1"
 
-# 生成唯一的job名称
+PIPELINE_YAML = "gs://temp2_de2025_group6/heart_disease_training_pipeline.yaml"
+PIPELINE_ROOT = "gs://temp2_de2025_group6"
+
+PARAMS = {
+    "project_id": PROJECT,
+    "data_bucket": "data2_de2025_group6",
+    "trainset_filename": "Heart_disease_cleveland_new.csv",
+    "model_repo": "models2_de2025_group6",
+}
+
+aip.init(project=PROJECT, location=LOCATION, staging_bucket=PIPELINE_ROOT)
+
 job_name = f"heart-disease-training-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-
-# 创建Pipeline Job
 job = aip.PipelineJob(
     display_name=job_name,
-    template_path="gs://temp2_de2025_group6/heart_disease_training_pipeline.yaml",
-    pipeline_root="gs://temp2_de2025_group6",
-    parameter_values={
-        'project_id': 'pelagic-pager-472017-v5',
-        'data_bucket': 'data2_de2025_group6',
-        'trainset_filename': 'Heart_disease_cleveland_new.csv',
-        'model_repo': 'models2_de2025_group6'
-    },
+    template_path=PIPELINE_YAML,
+    pipeline_root=PIPELINE_ROOT,
+    parameter_values=PARAMS,
     enable_caching=False,
 )
-
-# 提交job (异步)
 job.submit()
 
-print(f"✅ Pipeline Job已提交!")
-print(f"Job名称: {job_name}")
-print(f"Job资源: {job.resource_name}")
-print(f"查看进度: https://console.cloud.google.com/vertex-ai/pipelines?project=pelagic-pager-472017-v5")
-EOF
-        
-        echo ""
-        echo "=========================================="
-        echo "✅ 触发成功!"
-        echo "=========================================="
+print("✅ Pipeline Job 已提交")
+print("Job 名称:", job_name)
+print("资源名:", job.resource_name)
+PYCODE
+      # --- heredoc 结束标记行（PYCODE）前面不要有多余空格 ---
 
-timeout: 1200s  # 20分钟超时
+      echo "================================"
+      echo "✅ 触发成功！"
+      echo "================================"
 
+timeout: "1200s"  # 20分钟
 options:
   logging: CLOUD_LOGGING_ONLY
-  machineType: 'E2_HIGHCPU_8'
+  machineType: E2_HIGHCPU_8
