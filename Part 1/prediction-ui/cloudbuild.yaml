@@ -25,7 +25,9 @@ steps:
       - '-c'
       - |
         gcloud run services describe prediction-api \
+          --project=de2025-475823 \
           --region=us-central1 \
+          --platform=managed \
           --format='value(status.url)' > /workspace/api_url.txt
         echo "Prediction API URL: $(cat /workspace/api_url.txt)"
 
@@ -37,6 +39,7 @@ steps:
       - |
         API_URL=$(cat /workspace/api_url.txt)
         gcloud run deploy prediction-ui \
+          --project=de2025-475823 \
           --image=us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui:latest \
           --region=us-central1 \
           --platform=managed \
