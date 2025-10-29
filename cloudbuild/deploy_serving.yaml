@@ -55,7 +55,7 @@ steps:
       - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui'
     dir: 'Part 1/prediction-ui'
   
-  # Step 6: Get prediction-api URL
+    # Step 6: Get prediction-api URL (pin project + platform)
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
@@ -67,8 +67,8 @@ steps:
           --platform=managed \
           --format='value(status.url)' > /workspace/api_url.txt
         echo "Prediction API URL: $(cat /workspace/api_url.txt)"
-  #trial
-  # Step 7: Deploy prediction-ui with PREDICTOR_API env variable
+
+  # Step 7: Deploy prediction-ui with correct env
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
