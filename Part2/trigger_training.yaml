@@ -2,15 +2,12 @@
 # 最简单的方式：直接用 gcloud 命令提交 Vertex AI Pipeline
 
 steps:
-  # 唯一的步骤：使用 gcloud 提交 pipeline
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
         echo "🚀 提交 Vertex AI Pipeline..."
-        
-        # 创建参数 JSON 文件
         cat > /tmp/parameters.json <<EOF
         {
           "project_id": "${_PROJECT_ID}",
@@ -20,16 +17,16 @@ steps:
         }
         EOF
         
-        # 提交 pipeline
-        gcloud beta ai pipelines run \
+        gcloud ai pipeline-jobs create \
           --project=${_PROJECT_ID} \
           --region=${_LOCATION} \
-          --template-path=${_PIPELINE_YAML} \
           --display-name="heart-disease-$(date +%Y%m%d-%H%M%S)" \
+          --template-uri=${_PIPELINE_YAML} \
           --parameter-values-file=/tmp/parameters.json \
           --enable-caching=false
-        
+
         echo "✅ Pipeline 已提交"
+
 
 substitutions:
   _LOCATION: 'us-central1'
