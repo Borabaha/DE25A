@@ -13,7 +13,7 @@ steps:
         # 创建参数 JSON 文件
         cat > /tmp/parameters.json <<EOF
         {
-          "project_id": "${PROJECT_ID}",
+          "project_id": "${_PROJECT_ID}",
           "data_bucket": "${_DATA_BUCKET}",
           "trainset_filename": "${_TRAINSET}",
           "model_repo": "${_MODEL_BUCKET}"
@@ -22,7 +22,7 @@ steps:
         
         # 提交 pipeline
         gcloud beta ai pipelines run \
-          --project=${PROJECT_ID} \
+          --project=${_PROJECT_ID} \
           --region=${_LOCATION} \
           --template-path=${_PIPELINE_YAML} \
           --display-name="heart-disease-$(date +%Y%m%d-%H%M%S)" \
@@ -37,7 +37,7 @@ substitutions:
   _DATA_BUCKET: 'data2_de2025_group6'
   _MODEL_BUCKET: 'models2_de2025_group6'
   _TRAINSET: 'Heart_disease_cleveland_new.csv'
-  PROJECT_ID: 'pelagic-pager-472017-v5' 
+  _PROJECT_ID: 'pelagic-pager-472017-v5' 
 
 timeout: '600s'
 
