@@ -42,7 +42,7 @@ steps:
           --platform=managed \
           --allow-unauthenticated \
           --port=5000 \
-          --set-env-vars=PREDICTOR_API=$${API_URL}/heart_disease_predictor
+          --set-env-vars=PREDICTOR_API=$${API_URL}/heart_predictor/
 
 images:
   - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui:$SHORT_SHA'
