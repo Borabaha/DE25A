@@ -1,0 +1,24 @@
+{
+  "steps": [
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "us-central1-docker.pkg.dev/pelagic-pager-472017-v5/labrepo/pipeline-executor:latest",
+        "./pipeline_executor"
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "push",
+        "us-central1-docker.pkg.dev/pelagic-pager-472017-v5/labrepo/pipeline-executor:latest"
+      ]
+    }
+  ],
+  "timeout": "600s",
+  "options": {
+    "logging": "CLOUD_LOGGING_ONLY"
+  }
+}
