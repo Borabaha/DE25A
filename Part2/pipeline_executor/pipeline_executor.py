@@ -38,7 +38,8 @@ def main():
     # 初始化目标项目 (账户A)
     aiplatform.init(
         project=args.project_id,
-        location=args.location
+        location=args.location,
+        staging_bucket=f"gs://temp2_de2025_group6"
     )
     
     # 创建Pipeline Job
