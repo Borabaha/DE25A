@@ -6,7 +6,7 @@
         "build",
         "-t",
         "${_LOCATION}-docker.pkg.dev/${_PROJECT_ID}/${_REPOSITORY}/pipeline-executor:latest",
-        "./pipeline_executor"
+        "./Part2/pipeline_executor"
       ]
     },
     {
