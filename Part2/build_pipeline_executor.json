@@ -1,0 +1,29 @@
+{
+  "steps": [
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "build",
+        "-t",
+        "${_LOCATION}-docker.pkg.dev/${_PROJECT_ID}/${_REPOSITORY}/pipeline-executor:latest",
+        "./pipeline_executor"
+      ]
+    },
+    {
+      "name": "gcr.io/cloud-builders/docker",
+      "args": [
+        "push",
+        "${_LOCATION}-docker.pkg.dev/${_PROJECT_ID}/${_REPOSITORY}/pipeline-executor:latest"
+      ]
+    }
+  ],
+  "substitutions": {
+    "_PROJECT_ID": "de2025-475823",
+    "_LOCATION": "us-central1",
+    "_REPOSITORY": "labrepo"
+  },
+  "timeout": "600s",
+  "options": {
+    "logging": "CLOUD_LOGGING_ONLY"
+  }
+}
