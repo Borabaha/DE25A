@@ -6,8 +6,10 @@ Pipeline Executor for Cross-Account Vertex AI Pipeline Submission
 
 import argparse
 import json
+import os
 from google.cloud import aiplatform
 from datetime import datetime
+
 
 
 def main():
@@ -24,6 +26,8 @@ def main():
     params = json.loads(args.parameter_values)
     timestamp = datetime.now().strftime('%Y%m%d-%H%M%S')
     display_name = f"{args.display_name}-{timestamp}"
+
+    temp_bucket = os.getenv("_TEMP_BUCKET", "temp2_de2025_group6")
     
     print("=" * 60)
     print("🚀 Pipeline Executor - Cross Account")
@@ -39,7 +43,7 @@ def main():
     aiplatform.init(
         project=args.project_id,
         location=args.location,
-        staging_bucket=f"gs://temp2_de2025_group6"
+        staging_bucket=f"gs://{temp_bucket}"
     )
     
     # 创建Pipeline Job
