@@ -37,6 +37,7 @@ substitutions:
   _DATA_BUCKET: 'data2_de2025_group6'
   _MODEL_BUCKET: 'models2_de2025_group6'
   _TRAINSET: 'Heart_disease_cleveland_new.csv'
+  PROJECT_ID: 'pelagic-pager-472017-v5' 
 
 timeout: '600s'
 
