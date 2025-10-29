@@ -1,79 +1,44 @@
 # trigger_training.yaml
-# 提交 Vertex AI Pipeline 任务
+# 最简单的方式：直接用 gcloud 命令提交 Vertex AI Pipeline
 
 steps:
-# Step 0: 打印配置信息
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      echo "🚀 Vertex AI Pipeline 触发开始"
-      echo "======================================"
-      echo "Project: pelagic-pager-472017-v5"
-      echo "Region: us-central1"
-      echo "Pipeline Root: gs://temp2_de2025_group6"
-      echo "Pipeline YAML: gs://temp2_de2025_group6/heart_disease_training_pipeline.yaml"
-      echo "Data Bucket: data2_de2025_group6"
-      echo "Model Bucket: models2_de2025_group6"
-      echo "======================================"
+  # 唯一的步骤：使用 gcloud 提交 pipeline
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        echo "🚀 提交 Vertex AI Pipeline..."
+        
+        # 创建参数 JSON 文件
+        cat > /tmp/parameters.json <<EOF
+        {
+          "project_id": "${PROJECT_ID}",
+          "data_bucket": "${_DATA_BUCKET}",
+          "trainset_filename": "${_TRAINSET}",
+          "model_repo": "${_MODEL_BUCKET}"
+        }
+        EOF
+        
+        # 提交 pipeline
+        gcloud beta ai pipelines run \
+          --project=${PROJECT_ID} \
+          --region=${_LOCATION} \
+          --template-path=${_PIPELINE_YAML} \
+          --display-name="heart-disease-$(date +%Y%m%d-%H%M%S)" \
+          --parameter-values-file=/tmp/parameters.json \
+          --enable-caching=false
+        
+        echo "✅ Pipeline 已提交"
 
-# Step 1: 安装依赖并提交 Pipeline（合并到一个 step）
-- name: 'python:3.10'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      echo "📦 安装 Python 依赖..."
-      pip install --quiet google-cloud-aiplatform kfp
-      
-      echo "🚀 正在提交 Vertex AI Pipeline Job..."
+substitutions:
+  _LOCATION: 'us-central1'
+  _PIPELINE_YAML: 'gs://temp2_de2025_group6/heart_disease_training_pipeline.yaml'
+  _DATA_BUCKET: 'data2_de2025_group6'
+  _MODEL_BUCKET: 'models2_de2025_group6'
+  _TRAINSET: 'Heart_disease_cleveland_new.csv'
 
-      python3 - <<'PYCODE'
-      from google.cloud import aiplatform as aip
-      from datetime import datetime
-
-      PROJECT = "pelagic-pager-472017-v5"
-      LOCATION = "us-central1"
-      PIPELINE_YAML = "gs://temp2_de2025_group6/heart_disease_training_pipeline.yaml"
-      PIPELINE_ROOT = "gs://temp2_de2025_group6"
-
-      PARAMS = {
-          "project_id": PROJECT,
-          "data_bucket": "data2_de2025_group6",
-          "trainset_filename": "Heart_disease_cleveland_new.csv",
-          "model_repo": "models2_de2025_group6",
-      }
-
-      aip.init(project=PROJECT, location=LOCATION, staging_bucket=PIPELINE_ROOT)
-      job_name = f"heart-disease-training-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-
-      job = aip.PipelineJob(
-          display_name=job_name,
-          template_path=PIPELINE_YAML,
-          pipeline_root=PIPELINE_ROOT,
-          parameter_values=PARAMS,
-          enable_caching=False,
-      )
-      job.submit()
-
-      print("✅ Pipeline Job 已提交")
-      print(f"Job 名称: {job_name}")
-      print(f"资源名: {job.resource_name}")
-      PYCODE
-
-# Step 2: 打印成功日志
-- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
-      echo "======================================"
-      echo "✅ Vertex AI Pipeline 触发成功！"
-      echo "======================================"
-
-timeout: "1200s"  # 20分钟超时
+timeout: '600s'
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  machineType: E2_HIGHCPU_8
