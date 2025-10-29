@@ -2,7 +2,7 @@
 # 提交 Vertex AI Pipeline 任务
 
 steps:
-# Step 1: 打印配置信息
+# Step 0: 打印配置信息
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
   entrypoint: 'bash'
   args:
@@ -18,20 +18,15 @@ steps:
       echo "Model Bucket: models2_de2025_group6"
       echo "======================================"
 
-# Step 2: 安装 Python 依赖
+# Step 1: 安装依赖并提交 Pipeline（合并到一个 step）
 - name: 'python:3.10'
   entrypoint: 'bash'
   args:
     - '-c'
     - |
+      echo "📦 安装 Python 依赖..."
       pip install --quiet google-cloud-aiplatform kfp
-
-# Step 3: 提交 Vertex AI Pipeline 任务
-- name: 'python:3.10'
-  entrypoint: 'bash'
-  args:
-    - '-c'
-    - |
+      
       echo "🚀 正在提交 Vertex AI Pipeline Job..."
 
       python3 - <<'PYCODE'
@@ -67,7 +62,7 @@ steps:
       print(f"资源名: {job.resource_name}")
       PYCODE
 
-# Step 4: 打印成功日志
+# Step 2: 打印成功日志
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:latest'
   entrypoint: 'bash'
   args:
