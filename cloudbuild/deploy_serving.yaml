@@ -1,12 +1,29 @@
 steps:
-  # Step 0: Copy model from Account A GCS
+  # Step 0: Check if uploaded file is model.keras
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        # Get Pub/Sub attributes
+        echo "Checking uploaded file..."
+        
+        # Exit if not model.keras
+        if [[ "$(echo $_OBJECT_ID)" != "model.keras" ]]; then
+          echo "Skipping: not model.keras"
+          exit 0
+        fi
+        
+        echo "Processing model.keras"
+
+  # Step 1: Copy model from Account A GCS
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - 'cp'
       - 'gs://models2_de2025_group6/model.keras'
       - 'Part 1/prediction-api/models/model.keras'
   
-  # Step 1: Build prediction-api
+  # Step 2: Build prediction-api
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
@@ -17,14 +34,14 @@ steps:
       - '.'
     dir: 'Part 1/prediction-api'
   
-  # Step 2: Push prediction-api
+  # Step 3: Push prediction-api
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
       - '--all-tags'
       - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-api'
   
-  # Step 3: Deploy prediction-api
+  # Step 4: Deploy prediction-api
   - name: 'gcr.io/cloud-builders/gcloud'
     args:
       - 'run'
@@ -36,7 +53,7 @@ steps:
       - '--allow-unauthenticated'
       - '--port=5000'
   
-    # Step 4: Build prediction-ui Docker image
+    # Step 5: Build prediction-ui Docker image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
@@ -47,7 +64,7 @@ steps:
       - '.'
     dir: 'Part 1/prediction-ui'
   
-  # Step 5: Push prediction-ui image
+  # Step 6: Push prediction-ui image
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
@@ -55,7 +72,7 @@ steps:
       - 'us-central1-docker.pkg.dev/de2025-475823/heart-disease-repo/prediction-ui'
     dir: 'Part 1/prediction-ui'
   
-    # Step 6: Get prediction-api URL (pin project + platform)
+    # Step 7: Get prediction-api URL (pin project + platform)
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
@@ -68,7 +85,7 @@ steps:
           --format='value(status.url)' > /workspace/api_url.txt
         echo "Prediction API URL: $(cat /workspace/api_url.txt)"
 
-  # Step 7: Deploy prediction-ui with correct env
+  # Step 8: Deploy prediction-ui with correct env
   - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
