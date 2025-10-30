@@ -1,5 +1,5 @@
 # trigger_training.yaml
-# 最终方案：使用Docker镜像，账户B调用，账户A运行
+# Final Solution: Use Docker image, Account B triggers, Account A runs
 
 steps:
   - name: '${_LOCATION}-docker.pkg.dev/${_PROJECT_ID_B}/${_REPOSITORY}/pipeline-executor:latest'
@@ -11,8 +11,8 @@ steps:
       - '--parameter_values={"project_id":"${_PROJECT_ID_A}","data_bucket":"${_DATA_BUCKET}","trainset_filename":"${_TRAINSET}","model_repo":"${_MODEL_BUCKET}"}'
 
 substitutions:
-  _PROJECT_ID_A: 'pelagic-pager-472017-v5'        # 账户A：Pipeline运行的地方
-  _PROJECT_ID_B: 'de2025-475823'                  # 账户B：Trigger运行的地方
+  _PROJECT_ID_A: 'pelagic-pager-472017-v5'        # Account A: Where the Pipeline runs
+  _PROJECT_ID_B: 'de2025-475823'                  # Account B: Where the Trigger runs
   _LOCATION: 'us-central1'
   _REPOSITORY: 'labrepo'
   _PIPELINE_YAML: 'gs://temp2_de2025_group6/heart_disease_training_pipeline.yaml'

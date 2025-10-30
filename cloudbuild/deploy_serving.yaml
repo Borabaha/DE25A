@@ -1,5 +1,5 @@
 steps:
-  # Step 0: 从新账号拷贝模型
+  # Step 0: Copy model from Account A GCS
   - name: 'gcr.io/cloud-builders/gsutil'
     args:
       - 'cp'
