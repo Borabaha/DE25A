@@ -1,0 +1,81 @@
+volumes:
+  spark-data:
+    driver_opts:
+      type: none
+      device: /home/${USER_HOME}/data
+      o: bind
+  notebooks:
+    driver_opts:
+      type: none
+      device: /home/${USER_HOME}/notebooks
+      o: bind
+  spark-checkpoint:
+    driver_opts:
+      type: none
+      device: /home/${USER_HOME}/checkpoint
+      o: bind
+services:
+  spark-driver-app:
+    build:
+      context: ./jupyter-all-spark-notebook-gcp    # jupyter/all-spark-notebook with spark configurations for bigquery and gcs
+    container_name: spark-driver-app
+    ports:
+      - "8888:8888"
+      - "4040-4050:4040-4050"
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    volumes:
+      - notebooks:/home/jovyan/notebooks  # jovyan is the default user of the image all-spark-notebook:spark-3.1.2. Do not change this
+      - spark-data:/home/jovyan/data
+      - spark-checkpoint:/home/jovyan/checkpoint
+  spark-master:
+    build:
+      context: ./apache-spark-python3.11
+    container_name: spark-master
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    environment:
+      - SPARK_MODE=master
+      - SPARK_DAEMON_MEMORY=2G
+      - SPARK_MASTER_WEBUI_PORT=8080
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - spark-data:/home/jovyan/data
+      - spark-checkpoint:/home/jovyan/checkpoint
+  spark-worker-1:
+    build:
+      context: ./apache-spark-python3.11
+    container_name: spark-worker-1
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_EXECUTOR_MEMORY=2G
+      - SPARK_EXECUTOR_CORES=1
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_WEBUI_PORT=8081
+    ports:
+      - "8081:8081"
+    volumes:
+      - spark-data:/home/jovyan/data
+      - spark-checkpoint:/home/jovyan/checkpoint
+  spark-worker-2:
+    build:
+      context: ./apache-spark-python3.11
+    container_name: spark-worker-2
+    command: /opt/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_EXECUTOR_MEMORY=2G
+      - SPARK_EXECUTOR_CORES=1
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_WEBUI_PORT=8081
+    ports:
+      - "8082:8081"
+    volumes:
+      - spark-data:/home/jovyan/data
+      - spark-checkpoint:/home/jovyan/checkpoint
