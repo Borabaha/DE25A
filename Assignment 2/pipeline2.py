@@ -1,16 +1,5 @@
 """
 Pipeline 2: Payment Behavior & Installment Analysis (Lab Style)
-
-This script is the .py version of `notebooks/Pipeline2.ipynb`.
-It mirrors Lab 7/8 coding patterns:
-- Lab 7 `dataproc_example.py`: Spark session, configs, BigQuery connector
-- Lab 7 `Lab7_3.ipynb`, `Lab7_5.ipynb`: CSV reading patterns
-- Lab 8 `BasicDF_1.ipynb`, `AdvancedDF.ipynb`: filters, joins, aggregations, window functions
-
-Datasets (for local runs):
-- `olist_orders_dataset.csv`
-- `olist_order_payments_dataset.csv`
-Place sample slices under `/home/jovyan/data/sample/`. Switch to `gs://` paths when running on Dataproc.
 """
 
 from pathlib import Path
@@ -422,5 +411,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
 
 
