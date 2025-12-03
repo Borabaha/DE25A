@@ -1,0 +1,221 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.2">
+  <diagram name="Sayfa -1" id="Mgdw1utWNj9M7pI2Is3Z">
+    <mxGraphModel dx="1083" dy="582" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-18" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5JbyLwXVeaLE4ssx9_n3-2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-1" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Import Orders, Order Items, Products and Category Translation CSV Files Google Cloud Storage Bucket" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-19" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-2" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Filter only delivered orders" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-27" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-3" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Remove nulls from critical fields in order items" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-28" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-4" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Remove nulls from products (category must exist)" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-29" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-5" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Join 1: Order items with products (Left Join)" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-30" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-6" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Join 2: Add category translation (English names)&amp;nbsp;&lt;div&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;font style=&quot;color: light-dark(rgb(0, 0, 0), rgb(0, 0, 0));&quot;&gt;(Left Join)&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-31" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-7" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="select specific columns after join" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-20" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5JbyLwXVeaLE4ssx9_n3-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-8" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" value="Spark Session Initialization for Batch Pipeline 1" vertex="1">
+          <mxGeometry height="30" width="320" x="40" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-32" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-9" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Join 3: Add Order Timestamps (İnner Join)" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-33" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-11" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Extract year and quarter for analysis" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-34" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-13">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-12" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Calculate total revenue per item (price + freight)" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-35" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-13" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Handle missing category translations" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-36" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-15">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-14" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Aggregate Monthly Category Sales" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-37" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-15" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Compute Overall Performance per Category" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="780" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-38" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-16" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Rank Categories per Month Using Window Functions" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-39" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-22" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="&lt;p data-start=&quot;2152&quot; data-end=&quot;2197&quot;&gt;&lt;span data-start=&quot;2152&quot; data-end=&quot;2195&quot;&gt;Calculate Month-over-Month Growth Rates&lt;/span&gt;&lt;/p&gt;" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-40" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-23" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fontStyle=0;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="&lt;p data-start=&quot;2306&quot; data-end=&quot;2346&quot;&gt;&lt;strong data-start=&quot;2306&quot; data-end=&quot;2344&quot;&gt;Aggregate Quarterly Category Sales&lt;/strong&gt;&lt;/p&gt;" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="960" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-41" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="5JbyLwXVeaLE4ssx9_n3-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-24" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Write Result Tables to BigQuery (&lt;font style=&quot;font-size: 10px;&quot;&gt;category_monthly_performance,&amp;nbsp;category_overall_performance,&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font style=&quot;font-size: 10px;&quot;&gt;category_quarterly_sales)&lt;/font&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="320" x="40" y="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-25" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" value="Stop Spark Session" vertex="1">
+          <mxGeometry height="40" width="320" x="40" y="1110" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-44" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-45" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-47">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-45" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Import Orders and Payments CSV Files from&amp;nbsp;&lt;div&gt;Google Cloud Storage Bucket&lt;/div&gt;" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-46" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-47" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-49">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-47" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Filter Valid Delivered Orders and Positive Payments" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-48" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-51">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-49" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Join Order Data with Payment Data(İnner Join)" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-50" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-53">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-51" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Create Time Features" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-52" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-53" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-53" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Create Payment Range and Installment Categories" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-54" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-55" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Calculate Monthly Payment Metrics per Payment Type" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-56" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-61">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-57" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Analyze Installment Patterns by Payment Range" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-58" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-59" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5JbyLwXVeaLE4ssx9_n3-45">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-59" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" value="Spark Session Initialization for Batch Pipeline 2" vertex="1">
+          <mxGeometry height="30" width="320" x="440" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-60" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-61" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-63">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-61" parent="1" style="rounded=1;whiteSpace=wrap;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Analyze Hourly Payment Patterns per Payment Type" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-62" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-63" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-63" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="&lt;p data-pm-slice=&quot;0 0 []&quot;&gt;Estimate Monthly Cash Flow per Payment Type&lt;/p&gt;" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-64" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-65" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#0050ef;strokeColor=#001DBC;" target="5JbyLwXVeaLE4ssx9_n3-67">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-65" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="&lt;p data-pm-slice=&quot;0 0 []&quot;&gt;Apply Window Functions for Cumulative Values and Moving Averages&lt;/p&gt;" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="600" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-66" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-67" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5JbyLwXVeaLE4ssx9_n3-69">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-67" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" value="Write Result Tables to BigQuery" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-69" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#a20025;fontColor=#ffffff;strokeColor=#6F0000;" value="&lt;p data-pm-slice=&quot;0 0 []&quot;&gt;Stop Spark Session (End of Batch Pipeline 2)&lt;/p&gt;" vertex="1">
+          <mxGeometry height="40" width="320" x="440" y="720" as="geometry" />
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-70" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5JbyLwXVeaLE4ssx9_n3-73">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="820" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-72" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5JbyLwXVeaLE4ssx9_n3-75">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="880" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-74" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5JbyLwXVeaLE4ssx9_n3-77">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="940" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-76" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" target="5JbyLwXVeaLE4ssx9_n3-79">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="1000" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="5JbyLwXVeaLE4ssx9_n3-78" edge="1" parent="1" source="5JbyLwXVeaLE4ssx9_n3-79" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="1110" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
